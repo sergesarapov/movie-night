@@ -44,8 +44,8 @@ export const App = () => {
         <Typography variant='h6'>Starting the app...</Typography>
       ) : (<BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home roomId={roomId} newRoomHandler={onCreateNewRoom} />} />
-          <Route path={`/party/:roomId`} element={<Room loading={loading} socket={socket} />} />
+          <Route path='/movie-night' element={<Home roomId={roomId} newRoomHandler={onCreateNewRoom} />} />
+          <Route path={`/movie-night/party/:roomId`} element={<Room loading={loading} socket={socket} />} />
         </Routes>
       </BrowserRouter>)}
     </>
