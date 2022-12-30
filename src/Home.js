@@ -8,7 +8,7 @@ export const Home = ({ roomId, newRoomHandler }) => {
       <Box sx={{
         padding: '16px'
       }}>
-        <Link onClick={newRoomHandler} to={`/movie-night/party/${roomId}`}>Create TOP100 IMDb roll</Link>
+        <Link onClick={newRoomHandler} to={`/party/${roomId}`}>Create TOP100 IMDb roll</Link>
       </Box>
     </>
   );
