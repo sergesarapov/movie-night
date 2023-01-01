@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -19,6 +21,7 @@ export const Room = ({ loading = false, socket }) => {
   const [movies, updateMovies] = useState([]);
   const [open, setOpen] = useState(false);
   const [kickedMovie, updateKickedMovie] = useState();
+  const [isDisconnected, setIsDisconnected] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -29,19 +32,35 @@ export const Room = ({ loading = false, socket }) => {
   };
 
   useEffect(() => {
+    socket.on('connect', (data) => {
+      console.log('Connected');
+      if (isDisconnected) {
+        setIsDisconnected(false);
+      }
+    })
+    socket.on('disconnect', (data) => {
+      console.log('Disconnected', data);
+      setIsDisconnected(true);
+    });
+  }, [socket]);
+
+  useEffect(() => {
     socket.emit('connected', roomId);
+    console.log('Emmited joining the room', roomId);
     socket.emit('requested content', roomId);
+    console.log('Emmited request for content');
     socket.on('send content', (data) => {
       updateMovies(data);
+      console.log('Recieved the latest data', data.length);
     });
-  }, [roomId, loading, socket]);
+  }, [roomId, loading, socket, isDisconnected]);
 
   useEffect(() => {
     socket.on('list updated', (title) => {
       updateKickedMovie(title);
       setOpen(true);
     });
-  }, []);
+  });
 
   const handleDelete = (e) => {
     socket.emit('delete item', { roomId, movieId: e.target.id });
@@ -55,6 +74,11 @@ export const Room = ({ loading = false, socket }) => {
         marginLeft: '16px',
         marginBottom: '32px'
       }}>
+        <Box sx={{
+          marginBottom: '16px'
+        }}>
+          <RouterLink to="/">Back to main page</RouterLink>
+        </Box>
         <Typography variant="h6">Invite your friends using this link:</Typography>
         <TextField
           variant="outlined"
@@ -84,8 +108,6 @@ export const Room = ({ loading = false, socket }) => {
       <Box sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        // justifyContent: 'center',
-        // alignItems: 'center',
         margin: '16px'
       }}>
         {movies.map((movie, i) => (
@@ -114,9 +136,11 @@ const MovieItem = ({ title, rating, image, id, onDelete, isLast }) => {
       <CardContent sx={{
         padding: '8px'
       }}>
-        <Typography variant="body2" component="div">
-          {title}
-        </Typography>
+        <Link target="_blank" href={`https://www.imdb.com/title/${id}`}>
+          <Typography variant="body2" component="div">
+            {title}
+          </Typography>
+        </Link>
         <Typography variant="body2" color="text.secondary">
           {rating}
         </Typography>
@@ -124,6 +148,6 @@ const MovieItem = ({ title, rating, image, id, onDelete, isLast }) => {
       <CardActions>
         {!isLast && <Button variant="contained" id={id} onClick={onDelete} size="large">KICK OUT</Button>}
       </CardActions>
-    </Card>
+    </Card >
   )
 }
