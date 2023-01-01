@@ -34,10 +34,6 @@ export const Room = ({ loading = false, socket }) => {
   useEffect(() => {
     socket.on('connect', () => {
       console.log('Connected');
-
-      socket.emit('requested content', roomId);
-      console.log('Emitted request for content');
-
       setIsConnected(true);
     });
 
@@ -59,6 +55,9 @@ export const Room = ({ loading = false, socket }) => {
 
     socket.emit('connected', roomId);
     console.log('Emitted joining the room', roomId);
+
+    socket.emit('requested content', roomId);
+    console.log('Emitted request for content');
 
     return () => {
       socket.off('connect');
