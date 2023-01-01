@@ -21,7 +21,7 @@ export const Room = ({ loading = false, socket }) => {
   const [movies, updateMovies] = useState([]);
   const [open, setOpen] = useState(false);
   const [kickedMovie, updateKickedMovie] = useState();
-  const [isDisconnected, setIsDisconnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(socket.connected);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -32,35 +32,42 @@ export const Room = ({ loading = false, socket }) => {
   };
 
   useEffect(() => {
-    socket.on('connect', (data) => {
+    socket.on('connect', () => {
       console.log('Connected');
-      if (isDisconnected) {
-        setIsDisconnected(false);
-      }
-    })
+
+      socket.emit('requested content', roomId);
+      console.log('Emitted request for content');
+
+      setIsConnected(true);
+    });
+
     socket.on('disconnect', (data) => {
       console.log('Disconnected', data);
-      setIsDisconnected(true);
+      setIsConnected(false);
     });
-  }, [socket]);
 
-  useEffect(() => {
-    socket.emit('connected', roomId);
-    console.log('Emmited joining the room', roomId);
-    socket.emit('requested content', roomId);
-    console.log('Emmited request for content');
     socket.on('send content', (data) => {
       updateMovies(data);
       console.log('Recieved the latest data', data.length);
     });
-  }, [roomId, loading, socket, isDisconnected]);
 
-  useEffect(() => {
     socket.on('list updated', (title) => {
       updateKickedMovie(title);
       setOpen(true);
+      console.log('List updated, movie kicked:', title);
     });
-  });
+
+    socket.emit('connected', roomId);
+    console.log('Emitted joining the room', roomId);
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('send content');
+      socket.off('list updated');
+    };
+  }, [loading, socket, isConnected]);
+
 
   const handleDelete = (e) => {
     socket.emit('delete item', { roomId, movieId: e.target.id });
