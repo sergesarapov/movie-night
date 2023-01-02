@@ -24,8 +24,8 @@ export const App = () => {
         fetchData();
     }, []);
 
-    const onCreateNewRoom = async () => {
-        const resp = await fetch('https://movie-night-server.onrender.com/get-top100-imdb');
+    const onCreateNewRoom = async (api) => {
+        const resp = await fetch(api);
         const movies = await resp.json();
         socket.emit('created room', { roomId, movies });
         console.log(`Room ${roomId} created. Requested data.`);
