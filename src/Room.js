@@ -79,7 +79,7 @@ export const Room = ({ loading = true, onLoading, socket }) => {
     <>
       <Box sx={{
         marginLeft: '16px',
-        marginBottom: '32px',
+        marginBottom: '16px',
       }}>
         <Box sx={{
           marginBottom: '16px'
@@ -105,6 +105,23 @@ export const Room = ({ loading = true, onLoading, socket }) => {
         />
         <Button variant="outlined" onClick={() => navigator.clipboard.writeText(url)}>Copy link</Button>
       </Box>
+      {!loading && <Box sx={{ display: 'flex', marginLeft: '16px' }}>
+        <Typography sx={{
+          paddingRight: '8px'
+        }}>Movies left:</Typography>
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '25px',
+          height: '25px',
+          borderRadius: '50%',
+          backgroundColor: '#1976d2',
+          color: 'white'
+        }}>
+          <Typography>{movies.length}</Typography>
+        </Box>
+      </Box>}
       {loading && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
