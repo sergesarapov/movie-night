@@ -16,7 +16,7 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const Room = ({ loading = false, socket }) => {
+export const Room = ({ loading = true, onLoading, socket }) => {
   const { roomId } = useParams();
   const [movies, updateMovies] = useState([]);
   const [open, setOpen] = useState(false);
@@ -27,7 +27,6 @@ export const Room = ({ loading = false, socket }) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
@@ -45,6 +44,9 @@ export const Room = ({ loading = false, socket }) => {
     socket.on('send content', (data) => {
       updateMovies(data);
       console.log('Recieved the latest data', data.length);
+      if (loading) {
+        onLoading(false);
+      }
     });
 
     socket.on('list updated', (title) => {
@@ -66,7 +68,6 @@ export const Room = ({ loading = false, socket }) => {
       socket.off('list updated');
     };
   }, [loading, socket, isConnected]);
-
 
   const handleDelete = (e) => {
     socket.emit('delete item', { roomId, movieId: e.target.id });
@@ -104,7 +105,7 @@ export const Room = ({ loading = false, socket }) => {
         />
         <Button variant="outlined" onClick={() => navigator.clipboard.writeText(url)}>Copy link</Button>
       </Box>
-      {loading && <Typography sx={{ padding: '16px' }} variant="h5">loading...</Typography>}
+      {loading && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           {`Someone kicked out`} <b>{kickedMovie}</b>
