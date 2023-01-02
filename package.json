@@ -1,7 +1,7 @@
 {
   "name": "movie-night",
   "version": "0.1.0",
-  "homepage": "https://movie-night.onrender.com",
+  "homepage": "https://movie-night-delta.vercel.app",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
