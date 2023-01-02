@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -84,7 +84,7 @@ export const Room = ({ loading = true, onLoading, socket }) => {
                 <Box sx={{
                     marginBottom: '16px'
                 }}>
-                    <RouterLink to="/">Back to main page</RouterLink>
+                    <Link sx={{ display: 'flex', alignItems: 'center' }} href="/"><ArrowBackIosIcon fontSize="small" color="primary" />Back to main page</Link>
                 </Box>
                 <Typography variant="h6">Invite your friends using this link:</Typography>
                 <TextField
@@ -105,23 +105,25 @@ export const Room = ({ loading = true, onLoading, socket }) => {
                 />
                 <Button variant="outlined" onClick={() => navigator.clipboard.writeText(url)}>Copy link</Button>
             </Box>
-            {!loading && movies.length > 0 && <Box sx={{ display: 'flex', marginLeft: '16px' }}>
-                <Typography sx={{
-                    paddingRight: '8px'
-                }}>Movies left:</Typography>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    backgroundColor: '#1976d2',
-                    color: 'white'
-                }}>
-                    <Typography>{movies.length}</Typography>
+            {
+                !loading && movies.length > 0 && <Box sx={{ display: 'flex', marginLeft: '16px' }}>
+                    <Typography sx={{
+                        paddingRight: '8px'
+                    }}>Movies left:</Typography>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        backgroundColor: '#1976d2',
+                        color: 'white'
+                    }}>
+                        <Typography>{movies.length}</Typography>
+                    </Box>
                 </Box>
-            </Box>}
+            }
             {loading && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
             <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
