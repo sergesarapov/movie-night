@@ -113,8 +113,8 @@ export const Room = ({ loading = true, onLoading, socket }) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '25px',
-                    height: '25px',
+                    width: '28px',
+                    height: '28px',
                     borderRadius: '50%',
                     backgroundColor: '#1976d2',
                     color: 'white'
