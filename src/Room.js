@@ -78,7 +78,7 @@ export const Room = ({ loading = false, socket }) => {
     <>
       <Box sx={{
         marginLeft: '16px',
-        marginBottom: '32px'
+        marginBottom: '32px',
       }}>
         <Box sx={{
           marginBottom: '16px'
