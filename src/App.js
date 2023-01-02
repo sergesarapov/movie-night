@@ -25,14 +25,12 @@ export const App = () => {
     }, []);
 
     const onCreateNewRoom = async () => {
-        const resp = await fetch('https://raw.githubusercontent.com/sergesarapov/movie-night-api-mock/main/250.json');
-        const response = await resp.json();
-        const movies = response.items;
-        movies.splice(100, Infinity);
-        socket.emit('created room', { roomId, movies: movies });
+        const resp = await fetch('https://movie-night-server.onrender.com/get-top100-imdb');
+        const movies = await resp.json();
+        socket.emit('created room', { roomId, movies });
         console.log(`Room ${roomId} created. Requested data.`);
         setIsLoading(false);
-    }
+    };
 
     return (
         <>

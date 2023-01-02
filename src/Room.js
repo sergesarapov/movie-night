@@ -23,13 +23,6 @@ export const Room = ({ loading = true, onLoading, socket }) => {
     const [kickedMovie, updateKickedMovie] = useState();
     const [isConnected, setIsConnected] = useState(socket.connected);
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     useEffect(() => {
         socket.on('connect', () => {
             console.log('Connected');
@@ -69,9 +62,16 @@ export const Room = ({ loading = true, onLoading, socket }) => {
         };
     }, [loading, socket, isConnected]);
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     const handleDelete = (e) => {
         socket.emit('delete item', { roomId, movieId: e.target.id });
-    }
+    };
 
     const url = window.location.href;
 
