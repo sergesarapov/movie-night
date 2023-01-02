@@ -6,7 +6,7 @@ export const Home = ({ roomId, newRoomHandler }) => {
     return (
         <>
             <Box sx={{
-                display: 'flex',
+                display: 'inline-flex',
                 flexDirection: 'column',
                 padding: '16px',
                 height: '100px',

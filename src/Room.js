@@ -82,6 +82,7 @@ export const Room = ({ loading = true, onLoading, socket }) => {
                 marginBottom: '16px',
             }}>
                 <Box sx={{
+                    display: 'inline-flex',
                     marginBottom: '16px'
                 }}>
                     <Link sx={{ display: 'flex', alignItems: 'center' }} href="/"><ArrowBackIosIcon fontSize="small" color="primary" />Back to main page</Link>
