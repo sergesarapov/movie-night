@@ -16,12 +16,13 @@ const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const Room = ({ loading = true, onLoading, socket }) => {
+export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
     const { roomId } = useParams();
     const [movies, updateMovies] = useState([]);
     const [open, setOpen] = useState(false);
     const [kickedMovie, updateKickedMovie] = useState();
     const [isConnected, setIsConnected] = useState(socket.connected);
+    const [isExpired, setIsExpired] = useState(false);
 
     useEffect(() => {
         socket.on('connect', () => {
@@ -42,6 +43,13 @@ export const Room = ({ loading = true, onLoading, socket }) => {
             }
         });
 
+        if (!isNewRoom) {
+            socket.on('room expired', () => {
+                setIsExpired(true);
+                console.log('Room expired!');
+            });
+        }
+
         socket.on('list updated', (title) => {
             updateKickedMovie(title);
             setOpen(true);
@@ -59,6 +67,7 @@ export const Room = ({ loading = true, onLoading, socket }) => {
             socket.off('disconnect');
             socket.off('send content');
             socket.off('list updated');
+            socket.off('room expired');
         };
     }, [loading, socket, isConnected]);
 
@@ -125,7 +134,8 @@ export const Room = ({ loading = true, onLoading, socket }) => {
                     </Box>
                 </Box>
             }
-            {loading && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
+            {loading && !isExpired && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
+            {loading && isExpired && movies.length === 0 && <Typography sx={{ padding: '16px' }} variant="h5">This poll is expired! Please create a new one.</Typography>}
             <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     {`Someone kicked out`} <b>{kickedMovie}</b>

@@ -6,17 +6,18 @@ import { v4 as uuid } from 'uuid';
 import socketIOClient from "socket.io-client";
 import { Typography } from '@mui/material';
 
-const ENDPOINT = "https://movie-night-server.onrender.com";
+export const ENDPOINT = "https://movie-night-server.onrender.com";
 const socket = socketIOClient(ENDPOINT);
 const roomId = uuid();
 
 export const App = () => {
     const [loading, setIsLoading] = useState(true);
     const [mainLoading, setIsMainLoading] = useState(true);
+    const [isNewRoom, setIsNewRoom] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            const resp = await fetch('https://movie-night-server.onrender.com');
+            const resp = await fetch(ENDPOINT);
             if (resp.status === 200) {
                 setIsMainLoading(false);
             }
@@ -25,6 +26,7 @@ export const App = () => {
     }, []);
 
     const onCreateNewRoom = async (api) => {
+        setIsNewRoom(true);
         const resp = await fetch(api);
         const movies = await resp.json();
         socket.emit('created room', { roomId, movies });
@@ -42,7 +44,7 @@ export const App = () => {
             ) : (<BrowserRouter>
                 <Routes>
                     <Route path='/' element={<Home roomId={roomId} newRoomHandler={onCreateNewRoom} />} />
-                    <Route path={`/party/:roomId`} element={<Room loading={loading} onLoading={setIsLoading} socket={socket} />} />
+                    <Route path={`/party/:roomId`} element={<Room loading={loading} onLoading={setIsLoading} socket={socket} isNewRoom={isNewRoom} />} />
                 </Routes>
             </BrowserRouter>)}
         </>
