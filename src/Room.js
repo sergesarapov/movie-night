@@ -23,6 +23,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
     const [kickedMovie, updateKickedMovie] = useState();
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [isExpired, setIsExpired] = useState(false);
+    const [serverError, setServerError] = useState();
 
     useEffect(() => {
         socket.on('connect', () => {
@@ -61,6 +62,11 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
 
         socket.emit('requested content', roomId);
         console.log('Emitted request for content');
+
+        socket.on("server error", (data) => {
+            setServerError(data);
+            console.log('Server error', data);
+        });
 
         return () => {
             socket.off('connect');
@@ -135,6 +141,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
                 </Box>
             }
             {loading && !isExpired && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
+            {serverError && <Typography sx={{ padding: '16px' }} variant="h5">{serverError}</Typography>}
             {loading && isExpired && movies.length === 0 && <Typography sx={{ padding: '16px' }} variant="h5">This poll is expired! Please create a new one.</Typography>}
             <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
