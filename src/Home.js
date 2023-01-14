@@ -16,6 +16,7 @@ export const Home = ({ roomId, newRoomHandler }) => {
                 <Typography>Create new poll:</Typography>
                 <Link onClick={() => newRoomHandler(`${ENDPOINT}/get-top100-imdb`)} to={`/party/${roomId}`}>TOP 100 IMDb</Link>
                 <Link onClick={() => newRoomHandler(`${ENDPOINT}/get-most-popular-imdb`)} to={`/party/${roomId}`}>Most Popular IMDb</Link>
+                <Link onClick={() => newRoomHandler(`${ENDPOINT}/get-in-theaters-imdb`)} to={`/party/${roomId}`}>Most Popular IMDb</Link>
             </Box>
         </>
     );
