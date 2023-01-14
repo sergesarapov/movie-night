@@ -28,13 +28,8 @@ export const App = () => {
     const onCreateNewRoom = async (api) => {
         setIsNewRoom(true);
         const resp = await fetch(api);
-        try {
-            const movies = await resp.json();
-            socket.emit('created room', { roomId, movies });
-        } catch (e) {
-            const movies = await resp.text();
-            socket.emit('created room', { roomId, movies });
-        }
+        const movies = await resp.json();
+        socket.emit('created room', { roomId, movies });
         console.log(`Room ${roomId} created. Requested data.`);
         setIsLoading(false);
     };

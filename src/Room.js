@@ -141,7 +141,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
                 </Box>
             }
             {loading && !isExpired && <Typography sx={{ padding: '16px' }} variant="h5">Loading movies...</Typography>}
-            {serverError && <Typography sx={{ padding: '16px' }} variant="h5">{serverError}</Typography>}
+            {serverError && <Typography sx={{ padding: '16px' }} variant="h5">{`Error: ${serverError}. Don't worry, you always can watch Zoolander.`}</Typography>}
             {loading && isExpired && movies.length === 0 && <Typography sx={{ padding: '16px' }} variant="h5">This poll is expired! Please create a new one.</Typography>}
             <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
