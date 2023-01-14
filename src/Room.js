@@ -149,7 +149,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
                     {`Someone kicked out`} <b>{kickedMovie}</b>
                 </Alert>
             </Snackbar>
-            {movies.length === 1 && <Typography variant="h3" sx={{ marginLeft: '16px' }}>Your movie for today:</Typography>}
+            {movies.length === 1 && <Typography variant="h5" sx={{ marginLeft: '16px' }}>Your movie for today:</Typography>}
             <Box sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
