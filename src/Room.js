@@ -74,6 +74,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
             socket.off('send content');
             socket.off('list updated');
             socket.off('room expired');
+            socket.off("server error");
         };
     }, [loading, socket, isConnected]);
 
