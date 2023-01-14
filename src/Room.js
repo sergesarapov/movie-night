@@ -123,7 +123,7 @@ export const Room = ({ loading = true, onLoading, socket, isNewRoom }) => {
                 <Button variant="outlined" onClick={() => navigator.clipboard.writeText(url)}>Copy link</Button>
             </Box>
             {
-                !loading && movies.length > 0 && <Box sx={{ display: 'flex', marginLeft: '16px' }}>
+                !loading && movies.length > 1 && <Box sx={{ display: 'flex', marginLeft: '16px' }}>
                     <Typography sx={{
                         paddingRight: '8px'
                     }}>Movies left:</Typography>
